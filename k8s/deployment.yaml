@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: library-app
+  template:
+    metadata:
+      labels:
+        app: library-app
+    spec:
+      containers:
+        - name: library-app-container
+          image: library-management:latest      # e.g. yourusername/library-management:latest
+          ports:
+            - containerPort: 8000          # assuming Django default port
+          envFrom:
+            - secretRef:
+                name: library-app-secrets  # use for sensitive env vars
+            - configMapRef:
+                name: library-app-config   # optional: for non-sensitive config
